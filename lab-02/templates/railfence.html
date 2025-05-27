@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Rail Fence Cipher</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #F1A7C0, #A8E6CF);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            background: white; /* White background for clean look */
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), 0 0 12px rgba(241, 167, 192, 0.3); /* Bolder pastel pink shadow */
+            padding: 30px;
+            max-width: 700px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        h2 {
+            color: #4B5563; /* Darker gray for bolder elegance */
+            font-family: 'Arial', sans-serif;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .section-title {
+            color: #F1A7C0; /* Bolder pastel pink for section titles */
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Bolder shadow */
+        }
+        .form-section {
+            margin-bottom: 25px;
+        }
+        .form-control {
+            border-radius: 6px;
+            border-color: #D1D5DB; /* Slightly darker gray for input borders */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #A8E6CF; /* Bolder mint green on focus */
+            box-shadow: 0 0 8px rgba(168, 230, 207, 0.5); /* Bolder mint glow */
+        }
+        .btn:hover {
+            transform: translateY(-3px); /* Bolder lift on hover */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Bolder shadow on hover */
+        }
+        .btn-primary {
+            background-color: #A8E6CF; /* Bolder mint green for encrypt button */
+            border-color: #A8E6CF;
+            color: #1F2937; /* Darker gray text for readability */
+        }
+        .btn-primary:hover {
+            background-color: #8ED8B8; /* Darker mint green */
+            border-color: #8ED8B8;
+        }
+        .btn-success {
+            background-color: #F5E050; /* Bolder pastel yellow for decrypt button */
+            border-color: #F5E050;
+            color: #1F2937; /* Darker gray text for readability */
+        }
+        .btn-success:hover {
+            background-color: #E8D33F; /* Darker pastel yellow */
+            border-color: #E8D33F;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 12px;
+            background-color: #F3F4F6; /* Slightly darker gray for result */
+            border-radius: 6px;
+            border: 1px solid #D1D5DB; /* Bolder border */
+            display: none;
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>RAIL FENCE CIPHER</h2>
+        
+        <!-- Encryption Section -->
+        <div class="form-section">
+            <div class="section-title">ENCRYPTION</div>
+            <form method="POST" action="/railfence/encrypt" onsubmit="showResult(event, 'encryptResult')">
+                <div class="mb-3">
+                    <label class="form-label">Plain text:</label>
+                    <input type="text" class="form-control" name="plain_text" placeholder="Input Plain Text" required autofocus/>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Number of Rails:</label>
+                    <input type="number" class="form-control" name="rails" placeholder="Input Number of Rails" min="2" required/>
+                </div>
+                <button type="submit" class="btn btn-primary">Encrypt</button>
+            </form>
+            <div id="encryptResult" class="result"></div>
+        </div>
+
+        <!-- Decryption Section -->
+        <div class="form-section">
+            <div class="section-title">DECRYPTION</div>
+            <form method="POST" action="/railfence/decrypt" onsubmit="showResult(event, 'decryptResult')">
+                <div class="mb-3">
+                    <label class="form-label">Cipher text:</label>
+                    <input type="text" class="form-control" name="cipher_text" placeholder="Input Cipher Text" required/>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Number of Rails:</label>
+                    <input type="number" class="form-control" name="rails" placeholder="Input Number of Rails" min="2" required/>
+                </div>
+                <button type="submit" class="btn btn-success">Decrypt</button>
+            </form>
+            <div id="decryptResult" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        async function showResult(event, resultDivId) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.text();
+            const resultDiv = document.getElementById(resultDivId);
+            resultDiv.innerHTML = result;
+            resultDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
